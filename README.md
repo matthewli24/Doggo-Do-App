@@ -1,24 +1,24 @@
-# todo-flaskapp
+# flask api tut
 
 Setup virtual env and install flask:         
 ```
 $ cd <app>
-$ virtualenv env
-$ source env/bin/activate 
-$ pip3 install flask
+$ virtualenv venv
+$ source venv/bin/activate 
+$ pip install flask
 ```  
 
-To deactivate venv:   
+To deactivate virtual env:   
 ```
 $ deactivate
 ```  
 
 To run app on http://localhost:5000 
 ```
-$ python3 app.py
+$ python run.py
 ```
 
-This App is currently deployed on heroku as of 02/18/2019:
+This App is currently deployed on heroku as of XX/XX/2019:
 ```
-https://todoflaskapp.herokuapp.com/
+Not Yet!
 ```
