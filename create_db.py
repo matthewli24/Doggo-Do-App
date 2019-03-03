@@ -1,4 +1,4 @@
-from app import db
-from app.models import User, Todo_item
+# from app import db
+# from app.models import User, Todo_item
 
-db.create_all()
+# db.create_all()

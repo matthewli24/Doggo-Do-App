@@ -4,11 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <title> My ToDo App </title>
 </head>
 
@@ -40,8 +37,7 @@
         <h5 class="card-title"> Daily Goals </h5>
         <ul class="list-group">
           <li class="list-group-item"> Don't Be A Lazy
-            <a
-              href="https://metrouk2.files.wordpress.com/2016/05/deeply-lazy-cat.jpg?quality=90&strip=all&zoom=1&resize=644%2C370">
+            <a href="https://metrouk2.files.wordpress.com/2016/05/deeply-lazy-cat.jpg?quality=90&strip=all&zoom=1&resize=644%2C370">
               Cat </a>
           </li>
           <li class="list-group-item"> Have
@@ -99,31 +95,31 @@
 
         <ul class="list-group">
           {% for todo in todo_list %}
-            {% if todo.content and todo.completed and not(todo.deleted) %}
-              <li class="list-group-item d-flex justify-content-between align-items-center" style="text-decoration: line-through"> 
-                {{todo.content}} 
-                <form method="POST" action="/delete">
-                  <button type="submit" class="btn btn-outline-danger p-2" name="item_id" value="{{todo.id}}">DELETE</button>
-                </form>
-              </li>
-              
+          {% if todo.content and todo.completed and not(todo.deleted) %}
+          <li class="list-group-item d-flex justify-content-between align-items-center" style="text-decoration: line-through">
+            {{todo.content}}
+            <form method="POST" action="/delete">
+              <button type="submit" class="btn btn-outline-danger p-2" name="item_id" value="{{todo.id}}">DELETE</button>
+            </form>
+          </li>
 
-            {% elif todo.content and not(todo.deleted) %}
-              <li class="list-group-item d-flex justify-content-between align-items-center"> 
-                {{todo.content}} 
-                <div class="d-flex">
-                  <form method="POST" action="/completed" style="padding-right: 10px">
-                    <button type="submit" class="btn btn-outline-danger p-2" name="item_id" value="{{todo.id}}">COMPLETED</button>
-                  </form>
-                  <form method="POST" action="/delete">
-                    <button type="submit" class="btn btn-outline-danger p-2" name="item_id" value="{{todo.id}}">DELETE</button>
-                  </form>
-                </div>
-              </li>
-              {% endif %}
-           {% endfor %}
-         </ul>
-       </div>
+
+          {% elif todo.content and not(todo.deleted) %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{todo.content}}
+            <div class="d-flex">
+              <form method="POST" action="/completed" style="padding-right: 10px">
+                <button type="submit" class="btn btn-outline-danger p-2" name="item_id" value="{{todo.id}}">COMPLETED</button>
+              </form>
+              <form method="POST" action="/delete">
+                <button type="submit" class="btn btn-outline-danger p-2" name="item_id" value="{{todo.id}}">DELETE</button>
+              </form>
+            </div>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
     </div>
     {% endif %}
   </div>

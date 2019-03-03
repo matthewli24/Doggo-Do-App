@@ -1,48 +1,67 @@
-from flask import Flask, render_template, request, jsonify, url_for, json, redirect, make_response
-import os
-import requests
-from app.models import User, Todo_item
 from app import app
+from flask import jsonify
+from flask_restful import Resource, reqparse
+from app.models import User, Todo_item
 
-@app.route('/')
-def index():
-  SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-  json_url = os.path.join(SITE_ROOT, "data", "data.json")
-  data = json.load(open(json_url))
-  return render_template('index.html', todos=data)
+parser = reqparse.RequestParser()
+parser.add_argument(
+    'username', help='This field cannot be blank', required=True)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
 
-  return render_template('login.html')
+class Index(Resource):
+  def get(self):
+    return {'message': 'Hello, World!'}
 
-@app.route('/logout')
-def logout():
-  return render_template('logout.html')
 
-@app.route('/createuser', methods=['GET', 'POST'])
-def createUser():
-  if request.method == 'POST':
-    username = request.form['username']
-    
-  return render_template('createUser.html')
+class UserRegistration(Resource):
+  def post(self):
+    data = parser.parse_args()
 
-@app.route('/add', methods=['POST'])
-def add():
+    if User.find_by_username(data['username']):
+      return {'message': 'User {} already exists'. format(data['username'])}
 
-  return render_template('login.html')
-    
-@app.route('/completed', methods=['POST'])
-def completed():
- 
-  return render_template('index.html')
+    new_user = User(username=data['username'])
 
-@app.route('/delete', methods=['POST'])
-def delete():
+    try:
+      new_user.save_to_db()
+      return {
+          'message': 'User {} was created'.format(data['username'])
+      }
+    except:
+      return {'message': 'Something went wrong'}, 500
 
-  return render_template('index.html')
 
-def get_todo_list(cookie_jar):
+class UserLogin(Resource):
+  def post(self):
+    data = parser.parse_args()
+    return data
 
-  return 
 
+class UserLogoutAccess(Resource):
+  def post(self):
+    return {'message': 'User logout'}
+
+
+class UserLogoutRefresh(Resource):
+  def post(self):
+    return {'message': 'User logout'}
+
+
+class TokenRefresh(Resource):
+  def post(self):
+    return {'message': 'Token refresh'}
+
+
+class AllUsers(Resource):
+  def get(self):
+    return User.all_users()
+
+  def delete(self):
+    return {'message': 'Delete all users'}
+
+
+class SecretResource(Resource):
+  def get(self):
+    return {
+        'answer': 42
+    }
