@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
@@ -15,17 +14,28 @@ endpoint = "todoappflask.cejj8nvffgy6.us-east-1.rds.amazonaws.com"
 db_instance_name = "todoappflask"
 uri = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(
     username, password, endpoint, db_instance_name)
-print(uri)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "super_secret_key"
-app.config['JWT_SECRET_KEY'] = "super_secret_key"
 
 db = SQLAlchemy(app)
+
+#config for jwt token
+app.config['JWT_BLACKLIST_ENABLED'] = True
+app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+app.config['JWT_SECRET_KEY'] = "super_secret_key"
+jwt = JWTManager(app)
+
 
 @app.before_first_request
 def create_tables():
   db.create_all()
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+  jti = decrypted_token['jti']
+  return models.RevokedTokenModel.is_jti_blacklisted(jti)
 
 from app import routes
 
