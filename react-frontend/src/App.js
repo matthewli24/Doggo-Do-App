@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import axios from 'axios'
 import Navbar from './components/navbar'
+import Todos from './components/todos'
+import AddTodo from './components/addTodo'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     username: "",
-     items: [],
-     accessToken: '',
-     refreshToken: ''
+      username: "",
+      items: [],
+      accessToken: '',
+      refreshToken: ''
     }
   }
 

@@ -162,3 +162,23 @@ class UpdateItem(Resource):
         return "updated item {}".format(item.id)
     else:
         return {"message": "item id is probably not valid"}, 500
+
+
+class DeleteItem(Resource):
+    @jwt_required
+    def delete(self):
+      parser = reqparse.RequestParser()
+      parser.add_argument("id", type=int, help="This field cannot be blank", required=True)
+      data = parser.parse_args()
+
+      current_username = get_jwt_identity()
+      current_user = User.query.filter_by(username=current_username).first()
+
+      item = Todo_item.query.get(data["id"])
+
+      if item and item.user_id == current_user.id:
+        db.session.delete(item)
+        db.session.commit()
+        return "deleted item id: {} with content: {}".format(item.id, item.item)
+      else:
+          return {"message": "item id is probably not valid"}, 500
