@@ -1,4 +1,4 @@
-from app import app
+from app import app, db
 from flask import jsonify
 from flask_restful import Resource, reqparse
 from app.models import User, Todo_item, RevokedTokenModel
@@ -37,7 +37,7 @@ class UserRegistration(Resource):
           "refresh_token": refresh_token
       })
     except:
-      return jsonify({"message": "AH Shit! Something went wrong"}), 500
+      return {"message": "AH Shit! Something went wrong"}, 500
 
 
 class UserLogin(Resource):
@@ -74,7 +74,7 @@ class UserLogoutAccess(Resource):
           revoked_token.add()
           return jsonify({"message":"Access token has been revoked"})
         except:
-          return jsonify({"message": "AH Shit! Something went wrong"}), 500
+          return {"message": "AH Shit! Something went wrong"}, 500
 
 
 class UserLogoutRefresh(Resource):
@@ -86,7 +86,7 @@ class UserLogoutRefresh(Resource):
       revoked_token.add()
       return jsonify({"message":"Refresh token has been revoked"})
     except:
-      return jsonify({"message": "AH Shit! Something went wrong"}), 500
+      return {"message": "AH Shit! Something went wrong"}, 500
 
 
 class TokenRefresh(Resource):
@@ -111,7 +111,6 @@ class SecretResource(Resource):
 
 
 class AddItem(Resource):
-
   @jwt_required
   def post(self):
     parser = reqparse.RequestParser()
@@ -131,10 +130,35 @@ class AddItem(Resource):
     return jsonify({'message':"Added Cat-Do item"})
 
 class GetUserList(Resource):
-
   @jwt_required
   def get(self):
     current_username = get_jwt_identity()
     user = User.query.filter_by(username=current_username).first()
-    
+
     return Todo_item.all_users_items(user.todo_items)
+
+
+class UpdateItem(Resource):
+  @jwt_required
+  def put(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument("id", type=int, help="This field cannot be blank", required=True)
+    data = parser.parse_args()
+
+    ## TODO: make sure the current_user is the author of the item(s)
+    current_username = get_jwt_identity()
+    current_user = User.query.filter_by(username=current_username).first()
+
+    item = Todo_item.query.get(data["id"])
+
+    if item and item.user_id == current_user.id:
+        if not item.completed:
+            item.completed = True
+            db.session.commit()
+        else:
+            item.completed = False
+            db.session.commit()
+
+        return "updated item {}".format(item.id)
+    else:
+        return {"message": "item id is probably not valid"}, 500
