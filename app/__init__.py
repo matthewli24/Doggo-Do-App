@@ -17,14 +17,14 @@ uri = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(
 
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = "super_secret_key"
+app.config['SECRET_KEY'] = "b2BKk88uOQB98oJpYss3ZtkrTlfmhyeud9EOHYH6iEhIwsoQG5Gegv0EgtlePea"
 
 db = SQLAlchemy(app)
 
 #config for jwt token
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-app.config['JWT_SECRET_KEY'] = "super_secret_key"
+app.config['JWT_SECRET_KEY'] = "b2BKk88uOQB98oJpYss3ZtkrTlfmhyeud9EOHYH6iEhIwsoQG5Gegv0EgtlePea"
 jwt = JWTManager(app)
 
 
@@ -47,3 +47,5 @@ api.add_resource(routes.UserLogoutRefresh, '/logout/refresh')
 api.add_resource(routes.TokenRefresh, '/token/refresh')
 api.add_resource(routes.AllUsers, '/users')
 api.add_resource(routes.SecretResource, '/secret')
+api.add_resource(routes.AddItem,'/additem')
+api.add_resource(routes.GetUserList,'/todolist')

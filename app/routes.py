@@ -2,58 +2,65 @@ from app import app
 from flask import jsonify
 from flask_restful import Resource, reqparse
 from app.models import User, Todo_item, RevokedTokenModel
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
-
-parser = reqparse.RequestParser()
-parser.add_argument(
-    'username', help='This field cannot be blank', required=True)
+from flask_jwt_extended import (create_access_token,
+                                create_refresh_token,
+                                jwt_required,
+                                jwt_refresh_token_required,
+                                get_jwt_identity,
+                                get_raw_jwt,
+                                get_current_user)
 
 
 class Index(Resource):
   def get(self):
-    return {'message': 'Welcome to the Flask Api!'}
+    return jsonify({"message": "Welcome to the Flask Api!"})
 
 
 class UserRegistration(Resource):
   def post(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument("username", help="This field cannot be blank", required=True)
     data = parser.parse_args()
 
-    if User.find_by_username(data['username']):
-      return {'message': 'User {} already exists'. format(data['username'])}
+    if User.find_by_username(data["username"]):
+      return jsonify({"message": "User {} already exists". format(data["username"])})
 
-    new_user = User(username=data['username'])
+    new_user = User(username=data["username"])
 
     try:
       new_user.save_to_db()
-      access_token = create_access_token(identity = data['username'])
-      refresh_token = create_refresh_token(identity = data['username'])
-      return {
-          'message': 'User {} was created'.format(data['username']),
-          'access_token': access_token,
-          'refresh_token': refresh_token
-      }
+      access_token = create_access_token(identity = data["username"])
+      refresh_token = create_refresh_token(identity = data["username"])
+      return jsonify({
+          "message": "User {} was created".format(data["username"]),
+          "access_token": access_token,
+          "refresh_token": refresh_token
+      })
     except:
-      return {'message': 'AH Shit! Something went wrong'}, 500
+      return jsonify({"message": "AH Shit! Something went wrong"}), 500
 
 
 class UserLogin(Resource):
   def post(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument("username", help="This field cannot be blank", required=True)
     data = parser.parse_args()
-    current_user = User.find_by_username(data['username'])
+
+    current_user = User.find_by_username(data["username"])
 
     if not current_user:
-      return {'message': 'User {} doesn\'t exist'.format(data['username'])}
+      return jsonify({"message": "User {} doesn\'t exist".format(data["username"])})
 
     if current_user:
-      access_token = create_access_token(identity = data['username'])
-      refresh_token = create_refresh_token(identity = data['username'])
-      return {
-        'message': 'Logged in as {}'.format(current_user.username),
-        'access_token': access_token,
-        'refresh_token': refresh_token
-      }
+      access_token = create_access_token(identity = data["username"])
+      refresh_token = create_refresh_token(identity = data["username"])
+      return jsonify({
+        "message": "Logged in as {}".format(current_user.username),
+        "access_token": access_token,
+        "refresh_token": refresh_token
+      })
     else:
-      return {'message': 'Wrong credentials'}
+      return jsonify({"message": "Wrong credentials"})
 
 
 
@@ -61,25 +68,25 @@ class UserLogoutAccess(Resource):
   def post(self):
     @jwt_required
     def post(self):
-        jti = get_raw_jwt()['jti']
+        jti = get_raw_jwt()["jti"]
         try:
           revoked_token = RevokedTokenModel(jti = jti)
           revoked_token.add()
-          return {'message':'Access token has been revoked'}
+          return jsonify({"message":"Access token has been revoked"})
         except:
-          return {'message': 'AH Shit! Something went wrong'}, 500
+          return jsonify({"message": "AH Shit! Something went wrong"}), 500
 
 
 class UserLogoutRefresh(Resource):
   @jwt_refresh_token_required
   def post(self):
-    jti = get_raw_jwt()['jti']
+    jti = get_raw_jwt()["jti"]
     try:
       revoked_token = RevokedTokenModel(jti = jti)
       revoked_token.add()
-      return {'message':'Refresh token has been revoked'}
+      return jsonify({"message":"Refresh token has been revoked"})
     except:
-      return {'message': 'AH Shit! Something went wrong'}, 500
+      return jsonify({"message": "AH Shit! Something went wrong"}), 500
 
 
 class TokenRefresh(Resource):
@@ -87,7 +94,7 @@ class TokenRefresh(Resource):
   def post(self):
     current_user = get_jwt_identity()
     access_token = create_access_token(identity = current_user)
-    return {'access_token': access_token}
+    return jsonify({"access_token": access_token})
 
 
 class AllUsers(Resource):
@@ -98,6 +105,36 @@ class AllUsers(Resource):
 class SecretResource(Resource):
   @jwt_required
   def get(self):
-    return {
-        'answer': 42
-    }
+    return jsonify({
+        "answer": 42
+    })
+
+
+class AddItem(Resource):
+
+  @jwt_required
+  def post(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument("item", help="This field cannot be blank", required=True)
+    data = parser.parse_args()
+
+    current_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_username).first()
+
+
+    item_to_be_added = Todo_item(item=data["item"],
+                                 completed=False,
+                                 user_id=user.id)
+
+    item_to_be_added.add_item()
+
+    return jsonify({'message':"Added Cat-Do item"})
+
+class GetUserList(Resource):
+
+  @jwt_required
+  def get(self):
+    current_username = get_jwt_identity()
+    user = User.query.filter_by(username=current_username).first()
+    
+    return Todo_item.all_users_items(user.todo_items)

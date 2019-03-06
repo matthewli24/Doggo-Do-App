@@ -21,8 +21,10 @@ class User(db.Model):
   @classmethod
   def all_users(cls):
     def to_json(x):
-      return {'username': x.username}
-    return {'users': list(map(lambda x: to_json(x), User.query.all()))}
+      return {"id": x.id,
+              "username": x.username
+             }
+    return {"users": list(map(lambda x: to_json(x), User.query.all()))}
 
 
 class Todo_item(db.Model):
@@ -35,6 +37,19 @@ class Todo_item(db.Model):
   def __repr__(self):
     return '<Todo_item %r>' % self.item
 
+  def add_item(self):
+      db. session.add(self)
+      db.session.commit()
+      print("item added:", self.item)
+
+  @classmethod
+  def all_users_items(cls, todo_items):
+    def to_json(x):
+      return {"id": x.id,
+              "item": x.item,
+              "completed":x.completed
+             }
+    return {"items": list(map(lambda x: to_json(x), todo_items))}
 
 class RevokedTokenModel(db.Model):
   __tablename__ = 'revoked_tokens'
@@ -44,6 +59,7 @@ class RevokedTokenModel(db.Model):
   def add(self):
     db.session.add(self)
     db.session.commit()
+
 
   @classmethod
   def is_jti_blacklisted(cls, jti):
