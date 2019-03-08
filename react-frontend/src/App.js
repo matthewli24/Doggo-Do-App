@@ -1,8 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom'
 import axios from 'axios'
 import Navbar from './components/navbar'
 import Todos from './components/todos'
 import AddTodo from './components/addTodo'
+import SignUp from './components/signup'
+import Login from './components/login'
 
 class App extends Component {
   constructor(props) {
@@ -18,54 +21,53 @@ class App extends Component {
   componentDidMount() {
   }
 
+  resetUsername = () => {
+    this.setState({
+      username: ""
+    })
+  }
+
   handleChangeForUsername = (e) => {
     this.setState({
       username: e.target.value
     })
   }
 
-  handleLogin = (e) => {
-    e.preventDefault();
-    axios.post('/login', {username: this.state.username})
-      .then(response => {
-        console.log(response.data)
-        this.setState({
-          accessToken: response.data.access_token,
-          refreshToken: response.data.refresh_token
-        })
-      })
-
-      .catch(error => {
-        console.log(error)
-      })
-  }
-
-  handleSignUp = (e) => {
-    e.preventDefault();
-
-    axios({
-      method: 'get',
-      url: '/secret',
-      headers: {'Authorization': 'Bearer ' + this.state.accessToken}
+  handleAuth = (accessToken, refreshToken) => {
+    this.setState({
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     })
-      .then(response => {
-        console.log(response)
-      })
-
-      .catch(error => {
-        console.log(error)
-      })
   }
 
   render() {
     return (
-      <div className = "App">
-        <h1>Welcome {this.state.username}</h1>
-        <Navbar handleChangeForUsername={this.handleChangeForUsername}
-                handleLogin={this.handleLogin}
-                handleSignUp={this.handleSignUp}/>
-      </div>
-    );
+      <BrowserRouter>
+        <div className="App">
+          <h1>Welcome {this.state.username}</h1>
+          <Navbar username={this.state.username} />
+          <Route exact path='/'
+            render={() =>
+              <Login
+                handleChangeForUsername={this.handleChangeForUsername}
+                username={this.state.username}
+                resetUsername={this.resetUsername}
+                handleAuth={this.handleAuth}
+              />}
+          />
+          <Route exact path='/signup'
+            render={() =>
+              <SignUp
+                username={this.state.username}
+                handleChangeForUsername={this.handleChangeForUsername}
+                resetUsername={this.resetUsername}
+                handleAuth={this.handleAuth}
+              />
+            }
+          />
+        </div>
+      </BrowserRouter>
+    )
   }
 }
 

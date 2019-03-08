@@ -1,4 +1,4 @@
-from app import db
-from app.models import User, Todo_item, RevokedTokenModel
+from api import db
+from api.models import User, Todo_item, RevokedTokenModel
 
 db.create_all()

@@ -1,7 +1,7 @@
-from app import app, db
+from api import app, db
 from flask import jsonify
 from flask_restful import Resource, reqparse
-from app.models import User, Todo_item, RevokedTokenModel
+from api.models import User, Todo_item, RevokedTokenModel
 from flask_jwt_extended import (create_access_token,
                                 create_refresh_token,
                                 jwt_required,
@@ -23,7 +23,7 @@ class UserRegistration(Resource):
     data = parser.parse_args()
 
     if User.find_by_username(data["username"]):
-      return jsonify({"message": "User {} already exists". format(data["username"])})
+      return {"message": "User {} already exists". format(data["username"])}, 409
 
     new_user = User(username=data["username"])
 
@@ -49,7 +49,7 @@ class UserLogin(Resource):
     current_user = User.find_by_username(data["username"])
 
     if not current_user:
-      return jsonify({"message": "User {} doesn\'t exist".format(data["username"])})
+      return {"message": "User {} doesn\'t exist".format(data["username"])}, 400
 
     if current_user:
       access_token = create_access_token(identity = data["username"])

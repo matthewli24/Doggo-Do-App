@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
+
 # create flask app
 app = Flask(__name__)
 api = Api(app)
@@ -32,22 +33,24 @@ jwt = JWTManager(app)
 def create_tables():
   db.create_all()
 
+from api.models import User, Todo_item, RevokedTokenModel
+
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
   jti = decrypted_token['jti']
-  return models.RevokedTokenModel.is_jti_blacklisted(jti)
+  return RevokedTokenModel.is_jti_blacklisted(jti)
 
-from app import routes
+from api import routes
 
-api.add_resource(routes.Index, '/')
-api.add_resource(routes.UserRegistration, '/registration')
-api.add_resource(routes.UserLogin, '/login')
-api.add_resource(routes.UserLogoutAccess, '/logout/access')
-api.add_resource(routes.UserLogoutRefresh, '/logout/refresh')
-api.add_resource(routes.TokenRefresh, '/token/refresh')
-api.add_resource(routes.AllUsers, '/users')
-api.add_resource(routes.SecretResource, '/secret')
-api.add_resource(routes.AddItem,'/additem')
-api.add_resource(routes.GetUserList,'/todolist')
-api.add_resource(routes.UpdateItem,'/updateitem')
-api.add_resource(routes.DeleteItem,'/deleteitem')
+api.add_resource(routes.Index, '/api')
+api.add_resource(routes.UserRegistration, '/api/registration')
+api.add_resource(routes.UserLogin, '/api/login')
+api.add_resource(routes.UserLogoutAccess, '/api/logout/access')
+api.add_resource(routes.UserLogoutRefresh, '/api/logout/refresh')
+api.add_resource(routes.TokenRefresh, '/api/token/refresh')
+api.add_resource(routes.AllUsers, '/api/users')
+api.add_resource(routes.SecretResource, '/api/secret')
+api.add_resource(routes.AddItem,'/api/additem')
+api.add_resource(routes.GetUserList,'/api/todolist')
+api.add_resource(routes.UpdateItem,'/api/updateitem')
+api.add_resource(routes.DeleteItem,'/api/deleteitem')

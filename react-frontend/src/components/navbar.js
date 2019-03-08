@@ -1,19 +1,11 @@
-import React, {} from 'react';
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navbar = (props) => {
 
   return (
     <div className='navbarContainer'>
-
       <div> Cat-Do App </div>
-
-      <form onSubmit={props.handleLogin}>
-        <input type="text" onChange={props.handleChangeForUsername}/>
-        <button>Log In</button>
-      </form>
-
-      <button onClick={props.handleSignUp}>Sign Up</button>
-
     </div>
   )
 
