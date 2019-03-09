@@ -10,13 +10,13 @@ class AddTodo extends Component {
 
   handleChange = (e) => {
     this.setState({
-      todoItem: e.tartget.value
+      todoItem: e.target.value
     })
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.todoItem)
+    this.props.addNewTodo(this.state.todoItem)
   }
 
   render() {

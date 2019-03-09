@@ -3,7 +3,6 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import axios from 'axios'
 import Navbar from './components/navbar'
 import Todos from './components/todos'
-import AddTodo from './components/addTodo'
 import SignUp from './components/signup'
 import Login from './components/login'
 
@@ -12,13 +11,11 @@ class App extends Component {
     super(props);
     this.state = {
       username: "",
-      items: [],
+      todos: [],
       accessToken: '',
       refreshToken: ''
     }
   }
-
-
 
   resetUsername = () => {
     this.setState({
@@ -39,14 +36,17 @@ class App extends Component {
     })
   }
 
-  getItems = () => {
+  getTodos = () => {
     if (this.state.accessToken && this.state.username) {
       axios({
         method: 'get',
         url: '/api/todolist',
         headers: {Authorization: `Bearer ${this.state.accessToken}`}
       })
-        .then(response => {console.log(response)})
+        .then(response => {
+          console.log(response.data['items'])
+          this.setState({todos:response.data['items']})
+        })
         .catch(error => console.log(error))
     }
   }
@@ -61,9 +61,9 @@ class App extends Component {
             render={() =>
               <Login
                 handleChangeForUsername={this.handleChangeForUsername}
-                username={this.state.username}
                 resetUsername={this.resetUsername}
                 handleAuth={this.handleAuth}
+                username={this.state.username}
                 accessToken={this.state.accessToken}
               />}
           />
@@ -80,8 +80,9 @@ class App extends Component {
             render={() => 
               <Todos 
                 username={this.state.username}
-                getItems={this.getItems}
+                todos={this.state.todos}
                 accessToken={this.state.accessToken}
+                getTodos={this.getTodos}
               />}
           />
         </div>

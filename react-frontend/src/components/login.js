@@ -12,7 +12,7 @@ class Login extends Component {
     e.preventDefault();
     axios.post('/api/login', {username: this.props.username})
       .then(response => {
-        console.log(response.data)
+        //console.log(response.data)
         this.props.handleAuth(response.data['access_token'],response.data['refresh_token'])
         this.setState({
           loggedIn: true
