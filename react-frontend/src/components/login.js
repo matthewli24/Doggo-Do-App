@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios'
 
 class Login extends Component {
   state = {
-    showError: false
+    showError: false,
+    loggedIn: false
   }
 
   handleSubmit = (e) => {
@@ -13,8 +14,10 @@ class Login extends Component {
       .then(response => {
         console.log(response.data)
         this.props.handleAuth(response.data['access_token'],response.data['refresh_token'])
+        this.setState({
+          loggedIn: true
+        })
       })
-
       .catch(error => {
         this.setState({
           showError: true
@@ -30,6 +33,10 @@ class Login extends Component {
   }
   render() {
     let errorBar = this.state.showError ? <div>Please Enter Another Username</div> : null
+    if(this.state.loggedIn) {
+      // console.log("redirecting here now")
+      return <Redirect to="/todos" />
+    }
     return (
       <div>
         {errorBar}

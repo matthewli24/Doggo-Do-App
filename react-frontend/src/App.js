@@ -18,8 +18,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-  }
+
 
   resetUsername = () => {
     this.setState({
@@ -40,6 +39,18 @@ class App extends Component {
     })
   }
 
+  getItems = () => {
+    if (this.state.accessToken && this.state.username) {
+      axios({
+        method: 'get',
+        url: '/api/todolist',
+        headers: {Authorization: `Bearer ${this.state.accessToken}`}
+      })
+        .then(response => {console.log(response)})
+        .catch(error => console.log(error))
+    }
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -53,6 +64,7 @@ class App extends Component {
                 username={this.state.username}
                 resetUsername={this.resetUsername}
                 handleAuth={this.handleAuth}
+                accessToken={this.state.accessToken}
               />}
           />
           <Route exact path='/signup'
@@ -62,8 +74,15 @@ class App extends Component {
                 handleChangeForUsername={this.handleChangeForUsername}
                 resetUsername={this.resetUsername}
                 handleAuth={this.handleAuth}
-              />
-            }
+              />}
+          />
+          <Route exact path='/todos' 
+            render={() => 
+              <Todos 
+                username={this.state.username}
+                getItems={this.getItems}
+                accessToken={this.state.accessToken}
+              />}
           />
         </div>
       </BrowserRouter>
