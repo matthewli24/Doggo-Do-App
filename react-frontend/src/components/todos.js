@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import AddTodo from './addTodo'
 import './todos.css'
 
 class Todos extends Component {
+
   componentDidMount(){
+    if (!this.props.username && !this.props.accessToken) {
+      return this.props.history.push('/')
+    }
+    
     this.props.getTodos()
   }
 
@@ -40,7 +46,7 @@ class Todos extends Component {
   }
 
   deleteItem = (id) => {
-    console.log(id)
+    //console.log(id)
     axios({
       method: 'delete',
       url: '/api/deleteitem',
@@ -48,7 +54,7 @@ class Todos extends Component {
       data: {id: id}
     })
     .then(response => {
-      console.log(response)
+      //console.log(response)
       if (response.status === 200) {
         this.props.getTodos()
       }
@@ -57,6 +63,11 @@ class Todos extends Component {
   
   }
 
+  handleSignOut = () => {
+    //console.log(this.props)
+    this.props.signOut()
+    this.props.history.push('/')
+  }
 
   render() {
     const todoList = this.props.todos.length ? 
@@ -83,12 +94,13 @@ class Todos extends Component {
 
       })) :
       <p>You Have Nothing To Do</p>
+      
     return (
       <div className="todosContainer">
-        
-        TODOS LIST HERE FOR {this.props.username}
+
+        <button onClick={this.handleSignOut}>Sign Out</button>
+        <p>TODOS LIST HERE FOR {this.props.username}</p>
         {todoList}
-        
         <AddTodo addNewTodo={this.addNewTodo}/>
       </div>
     )

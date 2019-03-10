@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Jumbotron from './components/jumbotron'
 import Todos from './components/todos'
@@ -38,11 +38,7 @@ class App extends Component {
     })
   }
 
-  //revoke tokens
-  //reset username and tokens
-  //redirect to index page
   handleSignOut = () => {
-    console.log("trying to sign out")
     this.setState({
       username: "",
       items: [],
@@ -59,7 +55,7 @@ class App extends Component {
         headers: {Authorization: `Bearer ${this.state.accessToken}`}
       })
         .then(response => {
-          console.log(response.data['items'])
+          //console.log(response.data['items'])
           this.setState({todos:response.data['items']})
         })
         .catch(error => console.log(error))
@@ -74,39 +70,38 @@ class App extends Component {
           <Jumbotron 
             username={this.state.username} 
           />
-          <SignOutBtn
-            username={this.state.username} 
-            accessToken={this.state.accessToken}
-            handleSignOut={this.handleSignOut}
-          />
-          <Route exact path='/'
-            render={() =>
-              <Login
-                handleChangeForUsername={this.handleChangeForUsername}
-                resetUsername={this.resetUsername}
-                handleAuth={this.handleAuth}
-                username={this.state.username}
-                accessToken={this.state.accessToken}
-              />}
-          />
-          <Route exact path='/signup'
-            render={() =>
-              <SignUp
-                username={this.state.username}
-                handleChangeForUsername={this.handleChangeForUsername}
-                resetUsername={this.resetUsername}
-                handleAuth={this.handleAuth}
-              />}
-          />
-          <Route exact path='/todos' 
-            render={() => 
-              <Todos 
-                username={this.state.username}
-                todos={this.state.todos}
-                accessToken={this.state.accessToken}
-                getTodos={this.getTodos}
-              />}
-          />
+          <Switch>
+            <Route exact path='/'
+              render={(props) =>
+                <Login {...props}
+                  handleChangeForUsername={this.handleChangeForUsername}
+                  resetUsername={this.resetUsername}
+                  handleAuth={this.handleAuth}
+                  username={this.state.username}
+                  accessToken={this.state.accessToken}
+                />}
+            />
+            <Route path='/signup'
+              render={(props) =>
+                <SignUp {...props}
+                  username={this.state.username}
+                  handleChangeForUsername={this.handleChangeForUsername}
+                  resetUsername={this.resetUsername}
+                  handleAuth={this.handleAuth}
+                />}
+            />
+            <Route path='/todos' 
+              render={(props) => 
+                <Todos {...props}
+                  username={this.state.username}
+                  todos={this.state.todos}
+                  accessToken={this.state.accessToken}
+                  getTodos={this.getTodos}
+                  signOut={this.handleSignOut}
+                />}
+            />
+            <Redirect to='/' />
+          </Switch>
         </div>
       </BrowserRouter>
     )
