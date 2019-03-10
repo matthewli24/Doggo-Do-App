@@ -25,6 +25,9 @@ class UserRegistration(Resource):
     if User.find_by_username(data["username"]):
       return {"message": "User {} already exists". format(data["username"])}, 409
 
+    if data["username"] == "":
+      return {"message": "User {} already exists". format(data["username"])}, 409
+
     new_user = User(username=data["username"])
 
     try:
@@ -48,7 +51,7 @@ class UserLogin(Resource):
 
     current_user = User.find_by_username(data["username"])
 
-    if not current_user:
+    if not current_user or data["username"] == "":
       return {"message": "User {} doesn\'t exist".format(data["username"])}, 400
 
     if current_user:

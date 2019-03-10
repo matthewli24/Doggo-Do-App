@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import axios from 'axios'
-import Navbar from './components/navbar'
+import Jumbotron from './components/jumbotron'
 import Todos from './components/todos'
 import SignUp from './components/signup'
 import Login from './components/login'
+import SignOutBtn from './components/signOutBtn'
 
 class App extends Component {
   constructor(props) {
@@ -29,10 +30,24 @@ class App extends Component {
     })
   }
 
+  
   handleAuth = (accessToken, refreshToken) => {
     this.setState({
       accessToken: accessToken,
       refreshToken: refreshToken,
+    })
+  }
+
+  //revoke tokens
+  //reset username and tokens
+  //redirect to index page
+  handleSignOut = () => {
+    console.log("trying to sign out")
+    this.setState({
+      username: "",
+      items: [],
+      accessToken: "",
+      refreshToken: ""
     })
   }
 
@@ -56,7 +71,14 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <h1>Welcome {this.state.username}</h1>
-          <Navbar username={this.state.username} />
+          <Jumbotron 
+            username={this.state.username} 
+          />
+          <SignOutBtn
+            username={this.state.username} 
+            accessToken={this.state.accessToken}
+            handleSignOut={this.handleSignOut}
+          />
           <Route exact path='/'
             render={() =>
               <Login
