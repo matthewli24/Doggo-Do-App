@@ -68,16 +68,15 @@ class UserLogin(Resource):
 
 
 class UserLogoutAccess(Resource):
+  @jwt_required
   def post(self):
-    @jwt_required
-    def post(self):
-        jti = get_raw_jwt()["jti"]
-        try:
-          revoked_token = RevokedTokenModel(jti = jti)
-          revoked_token.add()
-          return jsonify({"message":"Access token has been revoked"})
-        except:
-          return {"message": "AH Shit! Something went wrong"}, 500
+      jti = get_raw_jwt()["jti"]
+      try:
+        revoked_token = RevokedTokenModel(jti = jti)
+        revoked_token.add()
+        return jsonify({"message":"Access token has been revoked"})
+      except:
+        return {"message": "AH Shit! Something went wrong"}, 500
 
 
 class UserLogoutRefresh(Resource):

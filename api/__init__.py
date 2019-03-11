@@ -13,8 +13,7 @@ username = "todoappflask"
 password = "todoappflask"
 endpoint = "todoappflask.cejj8nvffgy6.us-east-1.rds.amazonaws.com"
 db_instance_name = "todoappflask"
-uri = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(
-    username, password, endpoint, db_instance_name)
+uri = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(username, password, endpoint, db_instance_name)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

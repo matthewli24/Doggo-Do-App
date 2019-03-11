@@ -38,7 +38,7 @@ class Login extends Component {
       : null
 
     return (
-      <div className="d-flex flex-row justify-content-around align-items-center" >
+      <div className="d-flex flex-column justify-content-around align-items-center" >
         <div className="d-flex flex-column">
           {errorBar}
           <form onSubmit={this.handleSubmit}>
@@ -54,15 +54,13 @@ class Login extends Component {
           </form>
         </div>
 
-        <div className="d-flex flex-row justify-content-center" >
+        <div className="d-flex flex-row justify-content-center py-5" >
           <img className="iconImgFormat" src={DogBone}/>
           <Link to="/signup">
           <button className="btn btn-danger btn-lg rounded-pill">Sign Up</button>
           </Link>
         </div>
-       
-        
-        
+ 
       </div>
     )
   }
