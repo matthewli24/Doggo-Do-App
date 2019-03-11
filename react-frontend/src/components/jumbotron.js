@@ -1,10 +1,18 @@
 import React from 'react';
+import Dog from '../assets/dog.svg'
+import Dog1 from '../assets/dog1.svg'
 
-const Jumbotron = (props) => {
-
+const Jumbotron = ({username, accessToken}) => {
+  const name = (username && accessToken) ? (<div>Welcome {username}</div>) : null
+    
   return (
-    <div>
-      <div> Cat-Do App </div>
+    <div className="jumbotron jumbotron-fluid bg-primary text-white text-center">
+      <div className="d-flex flex-row justify-content-around">
+        <img src={Dog1}/>
+        <div className="display-4"> Doggo-Do App </div>
+        <img src={Dog}/>
+      </div>
+      {name}
     </div>
   )
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import AddTodo from './addTodo'
+import Poop from '../assets/pile-of-dung.svg'
+import LazyPup from '../assets/lazypuppy.jpg'
+import './iconImgFormat.css'
 import './todos.css'
 
 class Todos extends Component {
@@ -74,21 +76,21 @@ class Todos extends Component {
       (this.props.todos.map(todo => {
         if (todo.completed) {
           return (
-            <div key={todo.id}>
-              <div className="striked" onClick={() => {this.handleItemUpdate(todo.id)}} >
+            <ul className="list-group list-group-flush d-flex flex-row justify-content-between" key={todo.id}>
+              <li className="striked list-group-item" onClick={() => {this.handleItemUpdate(todo.id)}} >
                 {todo.item}
-              </div>
-              <button onClick={() => {this.deleteItem(todo.id)}}>Delete</button>
-            </div>
+              </li>
+              <button className="btn btn-primary mb-2" onClick={() => {this.deleteItem(todo.id)}}>Delete</button>
+            </ul>
           )}
         else {
           return (
-            <div key={todo.id}>
-              <div onClick={() => {this.handleItemUpdate(todo.id)}}>
+            <ul className="list-group list-group-flush d-flex flex-row justify-content-between" key={todo.id}>
+              <li className="list-group-item" onClick={() => {this.handleItemUpdate(todo.id)}}>
                 {todo.item}
-              </div>
-              <button onClick={() => {this.deleteItem(todo.id)}}>Delete</button>
-            </div>
+              </li>
+              <button className="btn btn-primary mb-1" onClick={() => {this.deleteItem(todo.id)}}>Delete</button>
+            </ul>
           )
         }
 
@@ -96,12 +98,31 @@ class Todos extends Component {
       <p>You Have Nothing To Do</p>
       
     return (
-      <div className="todosContainer">
+      <div className="d-flex flex-column">
 
-        <button onClick={this.handleSignOut}>Sign Out</button>
-        <p>TODOS LIST HERE FOR {this.props.username}</p>
-        {todoList}
-        <AddTodo addNewTodo={this.addNewTodo}/>
+        <div className="d-flex flex-row justify-content-end py-2 pr-5">
+          <img className="iconImgFormat" src={Poop}/>
+          <button className="btn btn-danger btn-lg rounded-pill" onClick={this.handleSignOut}>Sign Out</button>
+        </div>
+
+        <div className="d-flex flex-column align-items-center">
+          <div className="w-75 card align-items-center">
+
+            <img className="cardImg card-img-top" src={LazyPup}/>
+
+            <div className="card-body">
+              <h5 className="card-title">{this.props.username}'s Todo List</h5>
+            </div>
+
+            <div className="d-flex flex-column">
+              {todoList}
+            </div>
+          
+            
+            <AddTodo addNewTodo={this.addNewTodo}/>
+          </div>
+        </div>
+
       </div>
     )
   }

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
+import PawPrint from '../assets/paw-print.svg'
+import DogBone from '../assets/dog-bone.svg'
+import './iconImgFormat.css'
 
 class Login extends Component {
   state = {
@@ -30,18 +33,34 @@ class Login extends Component {
       })
   }
   render() {
-    let errorBar = this.state.showError ? <div>Please Enter Another Username</div> : null
+    let errorBar = this.state.showError ? 
+      <div className="p-3 mb-2 bg-danger text-white text-center">Please Enter Another Username</div> 
+      : null
 
     return (
-      <div>
-        {errorBar}
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" onChange={this.props.handleChangeForUsername} value={this.props.username}/>
-          <button>Log In</button>
-        </form>
+      <div className="d-flex flex-row justify-content-around align-items-center" >
+        <div className="d-flex flex-column">
+          {errorBar}
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group d-flex flex-row justify-content-center">
+              <label className="px-3">Username:</label>
+              <input className="pl-2 rounded-pill" type="text" onChange={this.props.handleChangeForUsername} placeholder="Enter Username" value={this.props.username}/>
+            </div>
 
-        
-        <button><Link to="/signup">Sign Up</Link></button>
+            <div className="d-flex flex-row justify-content-center" >
+              <img className="iconImgFormat" src={PawPrint}/>
+              <button className="btn btn-danger btn-lg rounded-pill">Log In</button>
+            </div>
+          </form>
+        </div>
+
+        <div className="d-flex flex-row justify-content-center" >
+          <img className="iconImgFormat" src={DogBone}/>
+          <Link to="/signup">
+          <button className="btn btn-danger btn-lg rounded-pill">Sign Up</button>
+          </Link>
+        </div>
+       
         
         
       </div>

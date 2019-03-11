@@ -22,11 +22,16 @@ class AddTodo extends Component {
 
   render() {
     return (
-      <div className="addTodoContainer">
+      <div className="card-body">
+
         <form onSubmit={this.handleSubmit}>
-          <label>Add new todo:</label>
-          <input type="text" onChange={this.handleChange} value={this.state.todoItem}/>
-          <button type="submit">Add</button>
+          <div className="input-group mb-3">
+            <input className="form-control" type="text" onChange={this.handleChange} placeholder="Add To Do Item" value={this.state.todoItem}/>
+          
+            <div className="input-group-append">
+              <button className="btn btn-primary mb-2" type="submit">Add</button>
+            </div>
+        </div>
         </form>
 
       </div>

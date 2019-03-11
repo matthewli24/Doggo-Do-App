@@ -5,7 +5,7 @@ import Jumbotron from './components/jumbotron'
 import Todos from './components/todos'
 import SignUp from './components/signup'
 import Login from './components/login'
-import SignOutBtn from './components/signOutBtn'
+
 
 class App extends Component {
   constructor(props) {
@@ -66,9 +66,9 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <h1>Welcome {this.state.username}</h1>
           <Jumbotron 
             username={this.state.username} 
+            accessToken={this.state.accessToken}
           />
           <Switch>
             <Route exact path='/'

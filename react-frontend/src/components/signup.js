@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import DogBone from '../assets/dog-bone.svg'
+import './iconImgFormat.css'
 
 class SignUp extends Component {
   state = {
@@ -37,17 +38,30 @@ class SignUp extends Component {
   }
 
   render() {
-    let errorBar = this.state.showError ? <div>Please Enter Another Username</div> : null
+    let errorBar = this.state.showError ? 
+      <div className="p-3 mb-2 bg-danger text-white text-center">
+        Please Enter Another Username
+      </div> 
+      : null
 
     return (
-      <div className="addTodoContainer">
-        {errorBar}
-        <form onSubmit={this.handleSubmit}>
-          <label>Enter New Username:</label>
-          <input type="text" onChange={this.props.handleChangeForUsername} value={this.props.username}/>
-          <button type="submit">Sign Up</button>
-        </form>
+      <div className="d-flex flex-row justify-content-around align-items-center">
+        <div className="d-flex flex-column">
+          {errorBar}
 
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group d-flex flex-row justify-content-center">
+              <label className="px-3">Enter New Username:</label>
+              <input className="pl-2 rounded-pill" type="text" onChange={this.props.handleChangeForUsername} placeholder="New UserName" value={this.props.username}/>
+            </div>
+
+            <div className="d-flex flex-row justify-content-center" >
+              <img className="iconImgFormat" src={DogBone}/>
+              <button className="btn btn-danger btn-lg rounded-pill" type="submit">Sign Up</button>
+            </div>
+          </form>
+
+        </div>
       </div>
     )
   }
