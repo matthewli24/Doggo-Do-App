@@ -15,7 +15,7 @@ def catch_all(path):
 
 # setting up db config
 username = "todoappflask"
-password = "todoappflask"
+password = "getDatmoney$$$"
 endpoint = "todoappflask.cejj8nvffgy6.us-east-1.rds.amazonaws.com"
 db_instance_name = "todoappflask"
 uri = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(username, password, endpoint, db_instance_name)
