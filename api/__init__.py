@@ -2,6 +2,8 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from api import config 
+import os
 
 
 # create flask app
@@ -14,22 +16,16 @@ def catch_all(path):
   return render_template('index.html')
 
 # setting up db config
-username = "todoappflask"
-password = "todoappflask"
-endpoint = "todoappflask.cejj8nvffgy6.us-east-1.rds.amazonaws.com"
-db_instance_name = "todoappflask"
-uri = 'mysql+pymysql://{}:{}@{}:3306/{}'.format(username, password, endpoint, db_instance_name)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', config.mysql["uri"])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = "b2BKk88uOQB98oJpYss3ZtkrTlfmhyeud9EOHYH6iEhIwsoQG5Gegv0EgtlePea"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', config.secrets["SECRET_KEY"])
 
 db = SQLAlchemy(app)
 
 #config for jwt token
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-app.config['JWT_SECRET_KEY'] = "b2BKk88uOQB98oJpYss3ZtkrTlfmhyeud9EOHYH6iEhIwsoQG5Gegv0EgtlePea"
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', config.secrets["JWT_SECRET_KEY"])
 jwt = JWTManager(app)
 
 
