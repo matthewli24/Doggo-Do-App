@@ -6,3 +6,8 @@
 .cardImg {
   width: 50%;
 }
+
+.jumboImgFormat {
+  height: 120px;
+  width: 120px;
+}
