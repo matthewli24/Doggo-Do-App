@@ -1,12 +1,17 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 
 # create flask app
-app = Flask(__name__)
+app = Flask(__name__,template_folder="../client/build", static_folder="client/build/static")
 api = Api(app)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+  return render_template('index.html')
 
 # setting up db config
 username = "todoappflask"
