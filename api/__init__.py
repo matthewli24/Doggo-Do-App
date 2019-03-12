@@ -5,7 +5,6 @@ from flask_jwt_extended import JWTManager
 from api import config 
 import os
 
-
 # create flask app
 app = Flask(__name__,template_folder="build", static_folder="build/static")
 api = Api(app)
@@ -16,16 +15,16 @@ def catch_all(path):
   return render_template('index.html')
 
 # setting up db config
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', config.mysql["uri"])
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(os.environ['SQLALCHEMY_DATABASE_URI'], config.mysql["uri"])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', config.secrets["SECRET_KEY"])
+app.config['SECRET_KEY'] = os.environ.get(os.environ['SECRET_KEY'], config.secrets["SECRET_KEY"])
 
 db = SQLAlchemy(app)
 
 #config for jwt token
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', config.secrets["JWT_SECRET_KEY"])
+app.config['JWT_SECRET_KEY'] = os.environ.get(os.environ['JWT_SECRET_KEY'], config.secrets["JWT_SECRET_KEY"])
 jwt = JWTManager(app)
 
 
