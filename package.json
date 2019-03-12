@@ -11,7 +11,7 @@
   "react-scripts": "2.1.5"
  },
  "scripts": {
-  "heroku-postbuild": "cd client && npm install && npm run build"
+  "heroku-postbuild": "cd client && npm install && npm run build && cd .."
  },
  "eslintConfig": {
   "extends": "react-app"
