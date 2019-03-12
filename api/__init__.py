@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager
 
 
 # create flask app
-app = Flask(__name__,template_folder="../client/build", static_folder="client/build/static")
+app = Flask(__name__,template_folder="build", static_folder="build/static")
 api = Api(app)
 
 @app.route('/', defaults={'path': ''})
