@@ -1,4 +1,4 @@
-#Doggo-Do App
+# Doggo-Do App
 
 A ToDo List For Dogs
 
@@ -34,7 +34,7 @@ $npm start
 ```
 
 
-#Production
+# Production
 ```
 $cd client    
 $npm run build   
@@ -49,6 +49,6 @@ This App is currently deployed on heroku as of 03/12/2019:
 https://doggo-do-app.herokuapp.com/
 ```
 
-#Improvements
+# Improvements
 * refactor the code a bit
- 
+
