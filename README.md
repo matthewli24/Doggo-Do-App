@@ -1,10 +1,14 @@
-# react-flask api tut
+#Doggo-Do App
+
+A ToDo List For Dogs
+
+# React, Flask (Restful Api), And AWS
 
 This a todo app built with react and flask and AWS RDS mySQL.   
 Developed on MacOS.
 
-# Starting Backend Flask
-Setup virtual env and install flask:         
+# Development 
+Setup virtual env and install flask and requirements:         
 ```
 $ cd <app>
 $ virtualenv venv
@@ -22,14 +26,29 @@ To run app on http://localhost:5000
 $ python run.py
 ```
 
-# Starting Frontend Flask
+Starting Frontend Flask
 ```
-cd views
-npm install (if first time running)
-npm start
+$cd client
+$npm install
+$npm start
 ```
 
-This App is currently deployed on heroku as of XX/XX/2019:
+
+#Production
 ```
-Not Yet!
+$cd client    
+$npm run build   
+$mv build/ ../api
+$cd .. (go back to the root directory)
+$python run.py  
+http://localhost:5000   
 ```
+
+This App is currently deployed on heroku as of 03/12/2019:
+```
+https://doggo-do-app.herokuapp.com/
+```
+
+#Improvements
+* refactor the code a bit
+ 
