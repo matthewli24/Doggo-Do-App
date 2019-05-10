@@ -1,4 +1,4 @@
-# Doggo-Do App
+# :dog::dog::dog: Doggo-Do App :dog::dog::dog:
 
 A ToDo List For Dogs
 
